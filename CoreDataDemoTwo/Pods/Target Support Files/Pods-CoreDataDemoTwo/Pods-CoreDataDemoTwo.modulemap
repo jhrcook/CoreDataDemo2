@@ -1,0 +1,6 @@
+framework module Pods_CoreDataDemoTwo {
+  umbrella header "Pods-CoreDataDemoTwo-umbrella.h"
+
+  export *
+  module * { export * }
+}
