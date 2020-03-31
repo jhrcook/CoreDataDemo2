@@ -10,8 +10,6 @@ This is a simple iOS application where I intend to practice setting up and using
 
 ---
 
-
-
 ## Getting Started
 
 As this app is intended as practice for another app I plan to develop in the future, I will be creating a CoreData model responsible for managing seedlings and information about them.
@@ -29,11 +27,32 @@ This demonstration app will have three views:
 
 Since I have yet to learn SwiftUI, this will have to be done using UIKit.
 However, I really do not like the Storyboards, and so I have decided to remove it and create and navigate the UI programmatically.
-For setting the constraints, I will use the ![Anchorage](https://github.com/Rightpoint/Anchorage) package from RightPoint.
+For setting the constraints, I will use the [Anchorage](https://github.com/Rightpoint/Anchorage) package from RightPoint.
+
+I removed the Storyboard by following this tutorial: [How To Start An iOS App Without Storyboards With Screenshots](https://www.zerotoappstore.com/how-to-start-an-ios-app-without-storyboards.html)
+
+## Setting-up CoreData
+
+**[Apple's Guide to CoreData](https://developer.apple.com/documentation/coredata)**
+
+### Creating the `Seedling` entity
+
+* [Creating a Core Data Model](https://developer.apple.com/documentation/coredata/creating_a_core_data_model)
+* [Modeling Data](https://developer.apple.com/documentation/coredata/modeling_data)
+
+I created a `Seedling` entity with the following attributes:
+
+* `genus: String`
+* `species: String`
+* `dateSown: Date`
+* `id: UUID`
+* `numberOfSeeds: Int16`
+
+I also removed the optionals for each of these values in the "Seedling+CoreDataProperties.swift" file.
+Each attribute is not "Optional" and the `numberOfSeeds` attribute has a default value of 0.
+The Codegen setting of the `Seedling` entity was set to "Manual/None" and I created the two Swift files using Editor > Create NSManagedObject Subclass….
 
 
+### Creating the CoreData stack
 
-
-![Creating a Core Data Model](https://developer.apple.com/documentation/coredata/creating_a_core_data_model)
-
-
+* [Setting Up a Core Data Stack](https://developer.apple.com/documentation/coredata/setting_up_a_core_data_stack)

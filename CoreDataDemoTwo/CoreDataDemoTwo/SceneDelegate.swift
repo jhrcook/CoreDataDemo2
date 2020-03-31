@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         let navigationVC = UINavigationController()
         window?.rootViewController = navigationVC
-        navigationVC.pushViewController(ViewController(), animated: false)
+        navigationVC.pushViewController(AllPlantsTableViewController(), animated: false)
         window?.makeKeyAndVisible()
     }
 
