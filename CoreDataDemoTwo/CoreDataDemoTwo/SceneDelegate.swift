@@ -7,10 +7,21 @@
 //
 
 import UIKit
+import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "Plants")
+        container.loadPersistentStores { description, error in
+            if let error = error {
+                print("Problem loading persistent stores: \(error)")
+            }
+        }
+        return container
+    }()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -23,7 +34,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         let navigationVC = UINavigationController()
         window?.rootViewController = navigationVC
-        navigationVC.pushViewController(AllPlantsTableViewController(), animated: false)
+        
+        let rootVC = AllPlantsTableViewController()
+        rootVC.container = persistentContainer
+        
+        navigationVC.pushViewController(rootVC, animated: false)
         window?.makeKeyAndVisible()
     }
 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		66AF1C0937D576E61378854F /* Pods_CoreDataDemoTwo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EC0EF70C11184D51E861985 /* Pods_CoreDataDemoTwo.framework */; };
+		8420A9CE24356782005F86AE /* AllPlantsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8420A9CD24356782005F86AE /* AllPlantsTableViewCell.swift */; };
 		84386FBD2433ED57008BBC74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84386FBC2433ED57008BBC74 /* AppDelegate.swift */; };
 		84386FBF2433ED57008BBC74 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84386FBE2433ED57008BBC74 /* SceneDelegate.swift */; };
 		84386FC12433ED57008BBC74 /* AllPlantsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84386FC02433ED57008BBC74 /* AllPlantsTableViewController.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		3EC0EF70C11184D51E861985 /* Pods_CoreDataDemoTwo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CoreDataDemoTwo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8420A9CD24356782005F86AE /* AllPlantsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlantsTableViewCell.swift; sourceTree = "<group>"; };
 		84386FB92433ED57008BBC74 /* CoreDataDemoTwo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataDemoTwo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84386FBC2433ED57008BBC74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84386FBE2433ED57008BBC74 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				84386FBC2433ED57008BBC74 /* AppDelegate.swift */,
 				84386FBE2433ED57008BBC74 /* SceneDelegate.swift */,
 				84386FC02433ED57008BBC74 /* AllPlantsTableViewController.swift */,
+				8420A9CD24356782005F86AE /* AllPlantsTableViewCell.swift */,
 				8442C3C42433F5B90087EA07 /* Plants.xcdatamodeld */,
 				8442C3BE2433F4720087EA07 /* SeedlingsTableViewController.swift */,
 				8442C3C02433F4C40087EA07 /* SeedlingDetailViewController.swift */,
@@ -227,6 +230,7 @@
 				8442C3CA2433F8E30087EA07 /* Seedling+CoreDataProperties.swift in Sources */,
 				8442C3BF2433F4720087EA07 /* SeedlingsTableViewController.swift in Sources */,
 				84386FBF2433ED57008BBC74 /* SceneDelegate.swift in Sources */,
+				8420A9CE24356782005F86AE /* AllPlantsTableViewCell.swift in Sources */,
 				8442C3C92433F8E30087EA07 /* Seedling+CoreDataClass.swift in Sources */,
 				8442C3C12433F4C40087EA07 /* SeedlingDetailViewController.swift in Sources */,
 			);

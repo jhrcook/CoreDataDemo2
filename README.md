@@ -56,3 +56,8 @@ The Codegen setting of the `Seedling` entity was set to "Manual/None" and I crea
 ### Creating the CoreData stack
 
 * [Setting Up a Core Data Stack](https://developer.apple.com/documentation/coredata/setting_up_a_core_data_stack)
+
+I initialized the `NSPersistentContainer` object as a lazy variable in the SceneDelegate file.
+It is then passed to the `AllPlantsTableViewController` instance created before pushing it as the view controller.
+This is the `container` attribute of the `AllPlantsTableViewController` class.
+
