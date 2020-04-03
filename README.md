@@ -61,3 +61,32 @@ I initialized the `NSPersistentContainer` object as a lazy variable in the Scene
 It is then passed to the `AllPlantsTableViewController` instance created before pushing it as the view controller.
 This is the `container` attribute of the `AllPlantsTableViewController` class.
 
+I then created a `NSFetchedResultsController` object to dynamically load `Seedling` objects when needed for table.
+
+```swift
+var fetchedResultsController: NSFetchedResultsController<Seedling>!
+```
+
+This object reports the number of sections and number of rows per section in the respective methods of the `AllPlantsTableViewController`.
+
+I also created `loadSavedData()` and `saveContext()` methods that load and save the data, respectively.
+The former creates the `fetchedResultsController` if it doesn't exist, and only fetches 20 objects at a time.
+
+To load in random data at the beginning, I created a private method `makeFakePlantData()`.
+
+## Additional UI
+
+I created a custom `UITableViewCell` for the `AllPlantsTableViewController`, `AllPlantsTableViewCell`.
+When passed a seedling, it configures itself.
+
+<img src="assets/Apr-02-2020_21-00-34.gif" width=300/>
+
+---
+
+**branch: `relationship-model`**
+
+I have gotten the basic model working: just a data base of seedlings.
+Now I want to go one step further and have two related data bases: a one-to-many relationship of plants and seedlings.
+
+
+

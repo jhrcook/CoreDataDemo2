@@ -13,15 +13,29 @@ class AllPlantsTableViewCell: UITableViewCell {
     
     var seedling: Seedling! {
         didSet {
-            print("new seedling: \(seedling.genus) \(seedling.species)")
             seedlingNameLabel.text = "\(seedling.genus) \(seedling.species)"
+            seedlingDateLabel.text = seedling.dateSown.description
+            numberOfSeedsLabel.text = "\(seedling.numberOfSeeds)"
         }
     }
     
     
     private let seedlingNameLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .boldSystemFont(ofSize: 16)
+        lbl.font = .preferredFont(forTextStyle: .headline)
+        return lbl
+    }()
+    
+    private let seedlingDateLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.font = .preferredFont(forTextStyle: .subheadline)
+        return lbl
+    }()
+    
+    private let numberOfSeedsLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.font = .preferredFont(forTextStyle: .body)
+        lbl.textAlignment = .right
         return lbl
     }()
     
@@ -44,7 +58,21 @@ class AllPlantsTableViewCell: UITableViewCell {
     
     func setupSubviews() {
         addSubview(seedlingNameLabel)
-        seedlingNameLabel.edgeAnchors == self.edgeAnchors
+        addSubview(seedlingDateLabel)
+        addSubview(numberOfSeedsLabel)
+        
+        numberOfSeedsLabel.verticalAnchors == self.verticalAnchors
+        numberOfSeedsLabel.trailingAnchor == self.trailingAnchor - 35
+        numberOfSeedsLabel.widthAnchor <= 40
+        
+        seedlingNameLabel.trailingAnchor == numberOfSeedsLabel.leadingAnchor
+        seedlingNameLabel.topAnchor == self.topAnchor
+        seedlingNameLabel.leadingAnchor == self.leadingAnchor + 10
+        
+        seedlingDateLabel.trailingAnchor == numberOfSeedsLabel.leadingAnchor
+        seedlingDateLabel.leadingAnchor == self.leadingAnchor + 10
+        seedlingDateLabel.topAnchor == seedlingNameLabel.bottomAnchor
+        seedlingDateLabel.bottomAnchor == self.bottomAnchor
     }
 
 }

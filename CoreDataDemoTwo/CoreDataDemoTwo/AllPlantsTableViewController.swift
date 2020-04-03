@@ -21,15 +21,19 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        // Load the data
         loadSavedData()
-        if (fetchedResultsController.fetchedObjects?.count == 0) {
-            makeFakePlantData()
-        }
-        print("View did load")
+        
         // Register cells
         tableView.register(AllPlantsTableViewCell.self, forCellReuseIdentifier: cellID)
     }
     
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let numObjects = fetchedResultsController.fetchedObjects?.count ?? 0
+        print("number of fetched objects: \(numObjects)")
+    }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -51,8 +55,12 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections![section]
-        print("there are \(sectionInfo.numberOfObjects) rows")
         return sectionInfo.numberOfObjects
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
     }
     
     
@@ -94,13 +102,13 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
 extension AllPlantsTableViewController {
     private func makeFakePlantData() {
         print("making fake plants:")
-        for _ in 0...5 {
+        for _ in 0...50 {
             let seedling = Seedling(context: container.viewContext)
             seedling.id = UUID()
             seedling.genus = randomString(length: 5)
             seedling.species = randomString(length: 8)
             seedling.dateSown = Date(timeIntervalSinceNow: Double.random(in: -100...0) * 60 * 60 * 24)
-            seedling.numberOfSeeds = 0
+            seedling.numberOfSeeds = Int16.random(in: 0...100)
         }
         
         saveContext()
@@ -108,8 +116,24 @@ extension AllPlantsTableViewController {
         tableView.reloadData()
     }
     
+    
+    private func removeAllPlantData() {
+        print("Removing all plants:")
+        if let seedlings = fetchedResultsController.fetchedObjects {
+            for seedling in seedlings {
+                container.viewContext.delete(seedling)
+            }
+        }
+        saveContext()
+        loadSavedData()
+        tableView.reloadData()
+    }
+    
+    
     func randomString(length: Int) -> String {
-      let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+      let letters = "abcdefghijklmnopqrstuvwxyz"
       return String((0..<length).map{ _ in letters.randomElement()! })
     }
+    
+    
 }
