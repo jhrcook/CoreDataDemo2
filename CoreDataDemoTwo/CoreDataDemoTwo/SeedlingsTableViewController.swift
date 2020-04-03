@@ -10,6 +10,13 @@ import UIKit
 
 class SeedlingsTableViewController: UITableViewController {
     
+    var plant: Plant! {
+        didSet {
+            title = "\(plant.genus) \(plant.species)"
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

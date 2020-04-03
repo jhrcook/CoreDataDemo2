@@ -88,3 +88,5 @@ When passed a seedling, it configures itself.
 I have gotten the basic model working: just a data base of seedlings.
 Now I want to go one step further and have two related data bases: a one-to-many relationship of plants and seedlings.
 
+I deleted the CoreData model and the Swift files it generated.
+I then commented out any relevant code and got the table view working.

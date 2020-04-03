@@ -13,15 +13,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     
-//    lazy var persistentContainer: NSPersistentContainer = {
-//        let container = NSPersistentContainer(name: "Plants")
-//        container.loadPersistentStores { description, error in
-//            if let error = error {
-//                print("Problem loading persistent stores: \(error)")
-//            }
-//        }
-//        return container
-//    }()
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "Plant")
+        container.loadPersistentStores { description, error in
+            if let error = error {
+                print("Problem loading plant persistent stores: \(error)")
+            }
+        }
+        return container
+    }()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -36,7 +36,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = navigationVC
         
         let rootVC = AllPlantsTableViewController()
-//        rootVC.container = persistentContainer
+        rootVC.container = persistentContainer
         
         navigationVC.pushViewController(rootVC, animated: false)
         window?.makeKeyAndVisible()

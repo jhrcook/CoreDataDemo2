@@ -11,17 +11,16 @@ import Anchorage
 
 class AllPlantsTableViewCell: UITableViewCell {
     
-//    var seedling: Seedling! {
-//        didSet {
-//            print("new seedling: \(seedling.genus) \(seedling.species)")
-//            seedlingNameLabel.text = "\(seedling.genus) \(seedling.species)"
-//        }
-//    }
+    var plant: Plant! {
+        didSet {
+            seedlingNameLabel.text = "\(plant.genus) \(plant.species)"
+        }
+    }
     
     
     private let seedlingNameLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .boldSystemFont(ofSize: 16)
+        lbl.font = .preferredFont(forTextStyle: .title2)
         return lbl
     }()
     
@@ -44,7 +43,7 @@ class AllPlantsTableViewCell: UITableViewCell {
     
     func setupSubviews() {
         addSubview(seedlingNameLabel)
-        seedlingNameLabel.edgeAnchors == self.edgeAnchors
+        seedlingNameLabel.edgeAnchors == self.edgeAnchors + 10
     }
 
 }
