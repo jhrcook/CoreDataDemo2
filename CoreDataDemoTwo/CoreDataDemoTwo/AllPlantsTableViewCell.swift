@@ -11,12 +11,12 @@ import Anchorage
 
 class AllPlantsTableViewCell: UITableViewCell {
     
-    var seedling: Seedling! {
-        didSet {
-            print("new seedling: \(seedling.genus) \(seedling.species)")
-            seedlingNameLabel.text = "\(seedling.genus) \(seedling.species)"
-        }
-    }
+//    var seedling: Seedling! {
+//        didSet {
+//            print("new seedling: \(seedling.genus) \(seedling.species)")
+//            seedlingNameLabel.text = "\(seedling.genus) \(seedling.species)"
+//        }
+//    }
     
     
     private let seedlingNameLabel: UILabel = {
@@ -48,7 +48,3 @@ class AllPlantsTableViewCell: UITableViewCell {
     }
 
 }
-
-
-
-// Figure out how to use other than default UITableViewCell
