@@ -14,6 +14,7 @@ class AllPlantsTableViewCell: UITableViewCell {
     var plant: Plant! {
         didSet {
             seedlingNameLabel.text = "\(plant.genus) \(plant.species)"
+            seedlingCountLabel.text = "\(plant.seeds.count)"
         }
     }
     
@@ -21,6 +22,13 @@ class AllPlantsTableViewCell: UITableViewCell {
     private let seedlingNameLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .preferredFont(forTextStyle: .title2)
+        return lbl
+    }()
+    
+    
+    private let seedlingCountLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.font = .preferredFont(forTextStyle: .body)
         return lbl
     }()
     
@@ -43,7 +51,15 @@ class AllPlantsTableViewCell: UITableViewCell {
     
     func setupSubviews() {
         addSubview(seedlingNameLabel)
-        seedlingNameLabel.edgeAnchors == self.edgeAnchors + 10
+        addSubview(seedlingCountLabel)
+        
+        seedlingNameLabel.verticalAnchors == self.verticalAnchors
+        seedlingCountLabel.verticalAnchors == self.verticalAnchors
+        
+        seedlingNameLabel.leadingAnchor == self.leadingAnchor + 10
+        seedlingNameLabel.trailingAnchor == seedlingCountLabel.leadingAnchor
+        seedlingCountLabel.trailingAnchor == self.trailingAnchor - 40
+        seedlingCountLabel.widthAnchor <= 50
     }
 
 }
