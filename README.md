@@ -96,6 +96,15 @@ I then commented out any relevant code and got the table view working.
 The initial table view just contains rows plant names.
 When one is tapped, it enters the seedling table view, another table view where each row is an instance of sowing the plant type.
 
-I am currently working on the ability to add a new seed.
-There is a "+" button that, when tapped, will push a `EditSowingInformationViewController` view controller where the information for a new sowing can be added.
+I had added the ability to add a new seed and edit an existing one.
+There is a "+" button that, when tapped,pushes a `EditSowingInformationViewController` view controller where the information for a new sowing can be added.
+If an existing cell is tapped, the same VC is pushed and the info can be added.
+There are some hidden bugs that would need to be dealt with if this were the final product, but for this demo, as they do not involve CoreData, will be ignored.
+
+<img src="assets/Apr-04-2020_17-20-00.gif" width=300/>
+
+**To-do:**  
+The next thing I need to figure out is how to get all the seeds for a plant.
+What I think I need to do is add the new seeds directly to the `plant.seeds` attribute instead of creating them and adding them to the context.
+Then, these seeds can be directly used by the seedling table view controller instead of creating a new `NSFetchedResultsController`.
 

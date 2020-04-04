@@ -31,7 +31,6 @@ class EditSowingInformationViewController: UIViewController {
         view.addSubview(editView)
         editView.edgeAnchors == view.edgeAnchors
         editView.setupSubViews()
-        
     }
     
     
@@ -40,7 +39,7 @@ class EditSowingInformationViewController: UIViewController {
         
         title = "Edit seed"
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancerEditInfo))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelEditInfo))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveSeedInfo))
         
         
@@ -61,9 +60,14 @@ class EditSowingInformationViewController: UIViewController {
     }
     */
     
-    @objc func cancerEditInfo() {
+    @objc func cancelEditInfo() {
         print("Returning to seedlings table without saving.")
-        coreDataDelegate.deleteSeed(seed)
+        
+        let seedDate = editView.datePicker.date
+        let seedCount = Int(editView.seedNumberTextField.text ?? "0") ?? 0
+        if Calendar.current.isDateInToday(seedDate) && seedCount == 0 {
+            coreDataDelegate.deleteSeed(seed)
+        }
         navigationController?.popViewController(animated: true)
     }
     
