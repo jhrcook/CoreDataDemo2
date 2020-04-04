@@ -27,7 +27,6 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
         
         loadSavedData()
         
-        print("View did load")
         // Register cells
         tableView.register(AllPlantsTableViewCell.self, forCellReuseIdentifier: cellID)
     }
@@ -77,11 +76,12 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
     func pushSeedlingsViewController(forPlant plant: Plant) {
         let seedlingVC = SeedlingsTableViewController()
         seedlingVC.plant = plant
+        seedlingVC.container = container
         navigationController?.pushViewController(seedlingVC, animated: true)
     }
     
     
-    func loadSavedData() {
+    private func loadSavedData() {
         if plantFetchedResultsController == nil {
             let request = Plant.createFetchRequest()
             let sort = NSSortDescriptor(key: "genus", ascending: true)
@@ -96,13 +96,13 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
             try plantFetchedResultsController.performFetch()
             tableView.reloadData()
         } catch {
-            print("Failed fetch.")
+            print("Failed fetch for plants.")
         }
     }
     
     
     
-    func saveContext() {
+    private func saveContext() {
         if container.viewContext.hasChanges {
             do {
                 try container.viewContext.save()

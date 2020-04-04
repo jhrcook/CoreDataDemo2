@@ -7,8 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
-class SeedlingsTableViewController: UITableViewController {
+class SeedlingsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+    
+    var container: NSPersistentContainer!
+    
+    var seedFetchedResultsController: NSFetchedResultsController<Seed>!
     
     var plant: Plant! {
         didSet {
@@ -16,96 +21,113 @@ class SeedlingsTableViewController: UITableViewController {
         }
     }
     
+    private let cellID = "tableViewCell"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newSowing))
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        
+        loadSavedData()
     }
 
-    // MARK: - Table view data source
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 65
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        
+        let seed = seedFetchedResultsController.object(at: indexPath)
+        cell.textLabel?.text = "\(seed.seedCount) seeds on \(seed.dateSown.description)"
+        cell.accessoryType = .disclosureIndicator
+        
         return cell
     }
-    */
+    
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return seedFetchedResultsController.sections?.count ?? 0
     }
-    */
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return seedFetchedResultsController.sections![section].numberOfObjects
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let seed = seedFetchedResultsController.object(at: indexPath)
+        pushEditViewController(withSeed: seed)
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    
+    func pushEditViewController(withSeed seed: Seed) {
+        let editVC = EditSowingInformationViewController()
+        editVC.seed = seed
+        editVC.coreDataDelegate = self
+        navigationController?.pushViewController(editVC, animated: true)
     }
-    */
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }
 
 
-
 extension SeedlingsTableViewController {
+    func loadSavedData() {
+        if seedFetchedResultsController == nil {
+            let request = Seed.createFetchRequest()
+            let sort = NSSortDescriptor(key: "dateSown", ascending: true)
+            request.sortDescriptors = [sort]
+            request.fetchBatchSize = 20
+            
+            request.predicate = NSPredicate(format: "plant.genus == %@ AND plant.species == %@", plant.genus, plant.species)
+            
+            seedFetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: container.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+            seedFetchedResultsController.delegate = self
+        }
+        
+        do {
+            try seedFetchedResultsController.performFetch()
+            tableView.reloadData()
+        } catch {
+            print("Failed fetch of seedlings for \(plant.genus) \(plant.species)")
+        }
+    }
+    
+    func saveContext() {
+        if container.viewContext.hasChanges {
+            do {
+                try container.viewContext.save()
+            } catch {
+                print("An error occurred while saving: \(error)")
+            }
+        }
+    }
+    
+    func deleteSeed(_ seed: Seed) {
+        // TODO
+        // Delete the seed, save, and loadSavedData
+        container.viewContext.delete(seed)
+        saveContext()
+        loadSavedData()
+    }
+}
+
+
+
+extension SeedlingsTableViewController: CoreDataSaveDelegate {
     @objc func newSowing() {
         // Make a new seed with the same plant and push EditSowingInformationViewController.
-        /// TODO
-        let ac = UIAlertController(title: "To-Do", message: "I still need to implement this feature.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
+        
+        let newSeed = Seed(context: container.viewContext)
+        newSeed.dateSown = Date()
+        newSeed.seedCount = 0
+        newSeed.plant = plant
+        pushEditViewController(withSeed: newSeed)
+        
     }
 }
