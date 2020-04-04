@@ -17,6 +17,8 @@
 		8442C3BF2433F4720087EA07 /* SeedlingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442C3BE2433F4720087EA07 /* SeedlingsTableViewController.swift */; };
 		8442C3C12433F4C40087EA07 /* SeedlingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442C3C02433F4C40087EA07 /* SeedlingDetailViewController.swift */; };
 		8442C3C32433F4F90087EA07 /* SeedlingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8442C3C22433F4F90087EA07 /* SeedlingDetailView.swift */; };
+		848B4B1F2438052E0050C7F5 /* EditSowingInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848B4B1E2438052E0050C7F5 /* EditSowingInformationViewController.swift */; };
+		848B4B21243805400050C7F5 /* EditSowingInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848B4B20243805400050C7F5 /* EditSowingInformationView.swift */; };
 		848D95452437F92300CBABE2 /* Plant.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 848D95432437F92300CBABE2 /* Plant.xcdatamodeld */; };
 		848D954A2437FA0800CBABE2 /* Plant+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848D95462437FA0800CBABE2 /* Plant+CoreDataClass.swift */; };
 		848D954B2437FA0800CBABE2 /* Plant+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 848D95472437FA0800CBABE2 /* Plant+CoreDataProperties.swift */; };
@@ -37,6 +39,8 @@
 		8442C3BE2433F4720087EA07 /* SeedlingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedlingsTableViewController.swift; sourceTree = "<group>"; };
 		8442C3C02433F4C40087EA07 /* SeedlingDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedlingDetailViewController.swift; sourceTree = "<group>"; };
 		8442C3C22433F4F90087EA07 /* SeedlingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedlingDetailView.swift; sourceTree = "<group>"; };
+		848B4B1E2438052E0050C7F5 /* EditSowingInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSowingInformationViewController.swift; sourceTree = "<group>"; };
+		848B4B20243805400050C7F5 /* EditSowingInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSowingInformationView.swift; sourceTree = "<group>"; };
 		848D95442437F92300CBABE2 /* Plant.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Plant.xcdatamodel; sourceTree = "<group>"; };
 		848D95462437FA0800CBABE2 /* Plant+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Plant+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		848D95472437FA0800CBABE2 /* Plant+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Plant+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
@@ -106,6 +110,8 @@
 				848D95432437F92300CBABE2 /* Plant.xcdatamodeld */,
 				8420A9CD24356782005F86AE /* AllPlantsTableViewCell.swift */,
 				8442C3BE2433F4720087EA07 /* SeedlingsTableViewController.swift */,
+				848B4B1E2438052E0050C7F5 /* EditSowingInformationViewController.swift */,
+				848B4B20243805400050C7F5 /* EditSowingInformationView.swift */,
 				8442C3C02433F4C40087EA07 /* SeedlingDetailViewController.swift */,
 				8442C3C22433F4F90087EA07 /* SeedlingDetailView.swift */,
 				84386FC52433ED5C008BBC74 /* Assets.xcassets */,
@@ -238,8 +244,10 @@
 				84386FBF2433ED57008BBC74 /* SceneDelegate.swift in Sources */,
 				8420A9CE24356782005F86AE /* AllPlantsTableViewCell.swift in Sources */,
 				848D954D2437FA0800CBABE2 /* Seed+CoreDataProperties.swift in Sources */,
+				848B4B1F2438052E0050C7F5 /* EditSowingInformationViewController.swift in Sources */,
 				848D954A2437FA0800CBABE2 /* Plant+CoreDataClass.swift in Sources */,
 				848D954C2437FA0800CBABE2 /* Seed+CoreDataClass.swift in Sources */,
+				848B4B21243805400050C7F5 /* EditSowingInformationView.swift in Sources */,
 				8442C3C12433F4C40087EA07 /* SeedlingDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

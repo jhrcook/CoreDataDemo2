@@ -19,6 +19,8 @@ class SeedlingsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newSowing))
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -94,4 +96,16 @@ class SeedlingsTableViewController: UITableViewController {
     }
     */
 
+}
+
+
+
+extension SeedlingsTableViewController {
+    @objc func newSowing() {
+        // Make a new seed with the same plant and push EditSowingInformationViewController.
+        /// TODO
+        let ac = UIAlertController(title: "To-Do", message: "I still need to implement this feature.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
 }

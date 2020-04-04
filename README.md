@@ -90,3 +90,12 @@ Now I want to go one step further and have two related data bases: a one-to-many
 
 I deleted the CoreData model and the Swift files it generated.
 I then commented out any relevant code and got the table view working.
+
+## Seedling information
+
+The initial table view just contains rows plant names.
+When one is tapped, it enters the seedling table view, another table view where each row is an instance of sowing the plant type.
+
+I am currently working on the ability to add a new seed.
+There is a "+" button that, when tapped, will push a `EditSowingInformationViewController` view controller where the information for a new sowing can be added.
+
