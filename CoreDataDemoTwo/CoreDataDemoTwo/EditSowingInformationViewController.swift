@@ -42,23 +42,9 @@ class EditSowingInformationViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelEditInfo))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveSeedInfo))
         
-        
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(seedNumberTapped))
-//        editView.seedNumberTextField.isUserInteractionEnabled = true
-//        editView.seedNumberLabel.addGestureRecognizer(tap)
+        editView.changePlantButton.addTarget(self, action: #selector(changePlant), for: .touchUpInside)
     }
-
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     @objc func cancelEditInfo() {
         print("Returning to seedlings table without saving.")
@@ -68,8 +54,11 @@ class EditSowingInformationViewController: UIViewController {
         if Calendar.current.isDateInToday(seedDate) && seedCount == 0 {
             coreDataDelegate.deleteSeed(seed)
         }
+        coreDataDelegate.saveContext()
+        coreDataDelegate.loadSavedData()
         navigationController?.popViewController(animated: true)
     }
+    
     
     @objc func saveSeedInfo() {
         print("Saving information and returning to seedlings table.")
@@ -83,5 +72,19 @@ class EditSowingInformationViewController: UIViewController {
         
         navigationController?.popViewController(animated: true)
     }
-
+    
+    
+    @objc func changePlant(sender: UIButton) {
+        print("Tapped 'Change Plant' button.")
+        if let nc = navigationController {
+            if let firstVC = nc.viewControllers.first as? AllPlantsTableViewController {
+                firstVC.movingSeed = seed
+                nc.popToViewController(firstVC, animated: true)
+            } else {
+                print("Cannot get first AllPlantsTableViewController.")
+            }
+        } else {
+            print("Cannot get navigation controller.")
+        }
+    }
 }

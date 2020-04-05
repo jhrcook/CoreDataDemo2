@@ -96,6 +96,8 @@ I then commented out any relevant code and got the table view working.
 The initial table view just contains rows plant names.
 When one is tapped, it enters the seedling table view, another table view where each row is an instance of sowing the plant type.
 
+### Add a new seed or edit an exists one
+
 I had added the ability to add a new seed and edit an existing one.
 There is a "+" button that, when tapped,pushes a `EditSowingInformationViewController` view controller where the information for a new sowing can be added.
 If an existing cell is tapped, the same VC is pushed and the info can be added.
@@ -103,8 +105,109 @@ There are some hidden bugs that would need to be dealt with if this were the fin
 
 <img src="assets/Apr-04-2020_17-20-00.gif" width=300/>
 
-**To-do:**  
-The next thing I need to figure out is how to get all the seeds for a plant.
-What I think I need to do is add the new seeds directly to the `plant.seeds` attribute instead of creating them and adding them to the context.
-Then, these seeds can be directly used by the seedling table view controller instead of creating a new `NSFetchedResultsController`.
+### Setting up the inverse relationships
 
+I needed to be able to connect the `Plant` and `Seed` objects in CoreData.
+This took the two changes:
+
+* For the `plant` relationship of the `Seed` entity, set the inverse as `seeds`. (This autmatically sets the inverse property for the `seeds` relationship for the `Plant` entity.)
+* Do *not* create an `NSFetchedResultsController` for the seeds. Instead, pull the seeds from the `plant.seeds` `Set`.
+
+<img src="assets/Apr-05-2020_09-39-16.gif" width=300/>
+
+### Swipe-to-delete a seed
+
+It was very easy to add swipe-to-delete for the seeds of a plant.
+First, the seed was delete from the container's `viewContext`, followed with deleting the row from the `tableView`.
+Then the container's context was saved and the `NSFetechedResultsController` was reloaded.
+
+## Changing the plant of a seed
+
+Unfortunately, it is possible that the plant may need to be changed for a seed.
+I will need to be able to do this, though it is not obvious how.
+
+### UI 
+
+I added text fields for the genus and species of the plant in the `EditSowingInformationView`.
+
+### Moving a seed
+
+The process was actually quite simple, though there are definitely many ways to do this.
+
+I decided to add a button the the seed editing view that, when tapped, would return the user back to the main view controller showing all of the plants, and let the user select the new plant to move to.
+(I am not worrying about adding a new plant because the process would just be an extension of this system and not too much new CoreData work.)
+
+#### Step 1. Configure button in `EditSowingInformationViewController`
+
+Below is the entire function for responding to a tap of the "Change Plant" button.
+
+```swift
+@objc func changePlant(sender: UIButton) {
+    print("Tapped 'Change Plant' button.")
+    if let nc = navigationController {
+        if let firstVC = nc.viewControllers.first as? AllPlantsTableViewController {
+            firstVC.movingSeed = seed
+            nc.popToViewController(firstVC, animated: true)
+        }
+    }
+}
+```
+
+All that happens is that the root view controller of type `AllPlantsTableViewController` is accessed and its (new) `movingSeed` attribute is set to the current seed.
+This view controller is then "popped" to, directly.
+
+#### Step 2. Moving the seed
+
+As referenced above, there is a new `movingSeed` attribute in `AllPlantsTableViewController`.
+It is an optional `Seed?`, and when set, changes the title of the view controller.
+If it set to a `Seed`, then the title becomes "Select new plant."
+
+```swift
+var movingSeed: Seed? {
+    didSet {
+        if movingSeed == nil {
+            title = "Plants"
+        } else {
+            title = "Select new plant"
+        }
+    }
+}
+```
+
+I then put all of the code for moving the seed into an extension.
+
+```swift
+extension AllPlantsTableViewController {
+    private func moveSeedToPlant(_ newPlant: Plant) {
+        guard let movingSeed = movingSeed else { return }
+        
+        print("Moving seed.")
+        
+        let oldPlant = movingSeed.plant
+        oldPlant.removeFromSeeds(movingSeed)
+        
+        movingSeed.plant = newPlant
+        
+        saveContext()
+        loadSavedData()
+        
+        self.movingSeed = nil
+    }
+}
+```
+
+Here are the steps followed in the `moveSeedToPlant(_ newPlant: Plant)` function above:
+
+1. Check if there is a seed to move, else return early.
+2. Get the old plant of the seed and remove the seed from its `seeds` property. (The `removeFromSeeds(Seed)` method was built by CoreData.)
+3. Set the plant of the moving seed to the new plant `newPlant`.
+4. Save the context and reload the data.
+5. Set the `movingSeed` to `nil` so that this process is not completed again.
+
+#### Call `moveSeedToPlant(_ newPlant: Plant)`
+
+The last step is to call `moveSeedToPlant(_ newPlant: Plant)` in the `tableView(_, didSelectRowAt)` function.
+If `movingSeed` is `nil`, nothing will happen and the selected plant's view controller will be pushed.
+If `movingSeed` is not `nil`, then the seed is moved, the CoreData store is saved and reloaded, and the plant's view controller is pushed.
+
+<img src="assets/Apr-05-2020_11-02-16.gif" width=300/>

@@ -14,6 +14,16 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
     var container: NSPersistentContainer!
     
     var plantFetchedResultsController: NSFetchedResultsController<Plant>!
+    
+    var movingSeed: Seed? {
+        didSet {
+            if movingSeed == nil {
+                title = "Plants"
+            } else {
+                title = "Select new plant"
+            }
+        }
+    }
 
     
     private let cellID = "plant"
@@ -52,6 +62,7 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
         }
     }
     
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65
     }
@@ -69,6 +80,7 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let plant = plantFetchedResultsController.object(at: indexPath)
+        moveSeedToPlant(plant)
         pushSeedlingsViewController(forPlant: plant)
     }
     
@@ -77,11 +89,14 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
         let seedlingVC = SeedlingsTableViewController()
         seedlingVC.plant = plant
         seedlingVC.container = container
+        seedlingVC.coreDataDelegate = self
         navigationController?.pushViewController(seedlingVC, animated: true)
     }
-    
-    
-    private func loadSavedData() {
+}
+
+
+extension AllPlantsTableViewController: CoreDataSaveDelegate {
+    func loadSavedData() {
         if plantFetchedResultsController == nil {
             let request = Plant.createFetchRequest()
             let sort = NSSortDescriptor(key: "genus", ascending: true)
@@ -101,8 +116,7 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
     }
     
     
-    
-    private func saveContext() {
+    func saveContext() {
         if container.viewContext.hasChanges {
             do {
                 try container.viewContext.save()
@@ -111,15 +125,40 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
             }
         }
     }
+    
+    
+    func deleteSeed(_ seed: Seed) {
+        container.viewContext.delete(seed)
+        saveContext()
+        loadSavedData()
+    }
+}
 
 
+
+extension AllPlantsTableViewController {
+    private func moveSeedToPlant(_ newPlant: Plant) {
+        guard let movingSeed = movingSeed else { return }
+        
+        print("Moving seed.")
+        
+        let oldPlant = movingSeed.plant
+        oldPlant.removeFromSeeds(movingSeed)
+        
+        movingSeed.plant = newPlant
+        
+        saveContext()
+        loadSavedData()
+        
+        self.movingSeed = nil
+    }
 }
 
 
 
 extension AllPlantsTableViewController {
     private func makeFakePlantData() {
-        print("making fake plants.")
+        print("Making fake plants.")
         
         let plantNames = [
             ["Frailea", "pygmaea"],
