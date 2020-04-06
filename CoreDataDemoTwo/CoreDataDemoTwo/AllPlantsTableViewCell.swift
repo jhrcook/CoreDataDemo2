@@ -11,31 +11,24 @@ import Anchorage
 
 class AllPlantsTableViewCell: UITableViewCell {
     
-    var seedling: Seedling! {
+    var plant: Plant! {
         didSet {
-            seedlingNameLabel.text = "\(seedling.genus) \(seedling.species)"
-            seedlingDateLabel.text = seedling.dateSown.description
-            numberOfSeedsLabel.text = "\(seedling.numberOfSeeds)"
+            seedlingNameLabel.text = "\(plant.genus) \(plant.species)"
+            seedlingCountLabel.text = "\(plant.seeds.count)"
         }
     }
     
     
     private let seedlingNameLabel: UILabel = {
         let lbl = UILabel()
-        lbl.font = .preferredFont(forTextStyle: .headline)
+        lbl.font = .preferredFont(forTextStyle: .title2)
         return lbl
     }()
     
-    private let seedlingDateLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.font = .preferredFont(forTextStyle: .subheadline)
-        return lbl
-    }()
     
-    private let numberOfSeedsLabel: UILabel = {
+    private let seedlingCountLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .preferredFont(forTextStyle: .body)
-        lbl.textAlignment = .right
         return lbl
     }()
     
@@ -44,6 +37,7 @@ class AllPlantsTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupSubviews()
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -58,25 +52,15 @@ class AllPlantsTableViewCell: UITableViewCell {
     
     func setupSubviews() {
         addSubview(seedlingNameLabel)
-        addSubview(seedlingDateLabel)
-        addSubview(numberOfSeedsLabel)
+        addSubview(seedlingCountLabel)
         
-        numberOfSeedsLabel.verticalAnchors == self.verticalAnchors
-        numberOfSeedsLabel.trailingAnchor == self.trailingAnchor - 35
-        numberOfSeedsLabel.widthAnchor <= 40
+        seedlingNameLabel.verticalAnchors == self.verticalAnchors
+        seedlingCountLabel.verticalAnchors == self.verticalAnchors
         
-        seedlingNameLabel.trailingAnchor == numberOfSeedsLabel.leadingAnchor
-        seedlingNameLabel.topAnchor == self.topAnchor
         seedlingNameLabel.leadingAnchor == self.leadingAnchor + 10
-        
-        seedlingDateLabel.trailingAnchor == numberOfSeedsLabel.leadingAnchor
-        seedlingDateLabel.leadingAnchor == self.leadingAnchor + 10
-        seedlingDateLabel.topAnchor == seedlingNameLabel.bottomAnchor
-        seedlingDateLabel.bottomAnchor == self.bottomAnchor
+        seedlingNameLabel.trailingAnchor == seedlingCountLabel.leadingAnchor
+        seedlingCountLabel.trailingAnchor == self.trailingAnchor - 40
+        seedlingCountLabel.widthAnchor <= 50
     }
 
 }
-
-
-
-// Figure out how to use other than default UITableViewCell

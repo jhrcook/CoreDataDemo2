@@ -14,10 +14,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Plants")
+        let container = NSPersistentContainer(name: "Plant")
         container.loadPersistentStores { description, error in
             if let error = error {
-                print("Problem loading persistent stores: \(error)")
+                print("Problem loading plant persistent stores: \(error)")
             }
         }
         return container

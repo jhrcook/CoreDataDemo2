@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Plant" representedClassName="Plant" syncable="YES">
+        <attribute name="genus" attributeType="String"/>
+        <attribute name="species" attributeType="String"/>
+        <attribute name="uuid" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="seeds" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Seed" inverseName="plant" inverseEntity="Seed"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uuid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Seed" representedClassName="Seed" syncable="YES">
+        <attribute name="dateSown" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="seedCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="plant" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Plant" inverseName="seeds" inverseEntity="Plant"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="uuid"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="Plant" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="Seed" positionX="286" positionY="-25.21484375" width="128" height="103"/>
+    </elements>
+</model>

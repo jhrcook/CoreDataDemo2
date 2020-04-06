@@ -13,7 +13,18 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
     
     var container: NSPersistentContainer!
     
-    var fetchedResultsController: NSFetchedResultsController<Seedling>!
+    var plantFetchedResultsController: NSFetchedResultsController<Plant>!
+    
+    var movingSeed: Seed? {
+        didSet {
+            if movingSeed == nil {
+                title = "Plants"
+            } else {
+                title = "Select new plant"
+            }
+        }
+    }
+
     
     private let cellID = "plant"
     
@@ -21,7 +32,9 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        // Load the data
+        title = "Plants"
+        navigationItem.largeTitleDisplayMode = .automatic
+        
         loadSavedData()
         
         // Register cells
@@ -40,48 +53,73 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! AllPlantsTableViewCell
         
         cell.accessoryType = .disclosureIndicator
-        let seedling = fetchedResultsController.object(at: indexPath)
-        cell.seedling = seedling
-        print("set \(seedling.genus) for cell \(indexPath.row)")
+        let plant = plantFetchedResultsController.object(at: indexPath)
+        cell.plant = plant
         
         return cell
     }
     
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return fetchedResultsController.sections?.count ?? 0
-    }
-    
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if plantFetchedResultsController.fetchedObjects?.count == 0 {
+            makeFakePlantData()
+        }
     }
     
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        return 65
     }
     
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return plantFetchedResultsController.sections?.count ?? 0
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let sectionInfo = plantFetchedResultsController.sections![section]
+        return sectionInfo.numberOfObjects
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let plant = plantFetchedResultsController.object(at: indexPath)
+        moveSeedToPlant(plant)
+        pushSeedlingsViewController(forPlant: plant)
+    }
+    
+    
+    func pushSeedlingsViewController(forPlant plant: Plant) {
+        let seedlingVC = SeedlingsTableViewController()
+        seedlingVC.plant = plant
+        seedlingVC.container = container
+        seedlingVC.coreDataDelegate = self
+        navigationController?.pushViewController(seedlingVC, animated: true)
+    }
+}
+
+
+extension AllPlantsTableViewController: CoreDataSaveDelegate {
     func loadSavedData() {
-        if fetchedResultsController == nil {
-            let request = Seedling.createFetchRequest()
-            let sort = NSSortDescriptor(key: "genus", ascending: false)
+        if plantFetchedResultsController == nil {
+            let request = Plant.createFetchRequest()
+            let sort = NSSortDescriptor(key: "genus", ascending: true)
             request.sortDescriptors = [sort]
             request.fetchBatchSize = 20
-            
-            fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: container.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-            fetchedResultsController.delegate = self
+
+            plantFetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: container.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+            plantFetchedResultsController.delegate = self
         }
+        
         do {
-            try fetchedResultsController.performFetch()
+            try plantFetchedResultsController.performFetch()
             tableView.reloadData()
         } catch {
-            print("Failed fetch.")
+            print("Failed fetch for plants.")
         }
     }
-    
     
     
     func saveContext() {
@@ -93,43 +131,66 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
             }
         }
     }
+    
+    
+    func deleteSeed(_ seed: Seed) {
+        container.viewContext.delete(seed)
+        saveContext()
+        loadSavedData()
+    }
+}
 
 
+
+extension AllPlantsTableViewController {
+    private func moveSeedToPlant(_ newPlant: Plant) {
+        guard let movingSeed = movingSeed else { return }
+        
+        print("Moving seed.")
+        
+        let oldPlant = movingSeed.plant
+        oldPlant.removeFromSeeds(movingSeed)
+        
+        movingSeed.plant = newPlant
+        
+        saveContext()
+        loadSavedData()
+        
+        self.movingSeed = nil
+    }
 }
 
 
 
 extension AllPlantsTableViewController {
     private func makeFakePlantData() {
-        print("making fake plants:")
-        for _ in 0...50 {
-            let seedling = Seedling(context: container.viewContext)
-            seedling.id = UUID()
-            seedling.genus = randomString(length: 5)
-            seedling.species = randomString(length: 8)
-            seedling.dateSown = Date(timeIntervalSinceNow: Double.random(in: -100...0) * 60 * 60 * 24)
-            seedling.numberOfSeeds = Int16.random(in: 0...100)
-        }
+        print("Making fake plants.")
         
-        saveContext()
-        loadSavedData()
-        tableView.reloadData()
-    }
-    
-    
-    private func removeAllPlantData() {
-        print("Removing all plants:")
-        if let seedlings = fetchedResultsController.fetchedObjects {
-            for seedling in seedlings {
-                container.viewContext.delete(seedling)
-            }
+        let plantNames = [
+            ["Frailea", "pygmaea"],
+            ["Frailea", "phaeodisca"],
+            ["Haworthia", "emelyae"],
+            ["Lophophora", "diffusa"],
+            ["Turbinicarpus", "schmiedickeanus"],
+            ["Turbinicarpus", "pseudopectinatus"],
+            ["Ferocactus", "macrodiscus"],
+            ["Neoporteria", "napina"],
+            ["Thelocactus", "hexaedrophorus"],
+            ["Neoporteria", "esmeraldana"]
+        ]
+
+        for plantName in plantNames {
+            let plant = Plant(context: container.viewContext)
+            plant.uuid = UUID()
+            plant.genus = plantName[0]
+            plant.species = plantName[1]
         }
+
         saveContext()
         loadSavedData()
         tableView.reloadData()
     }
-    
-    
+
     func randomString(length: Int) -> String {
       let letters = "abcdefghijklmnopqrstuvwxyz"
       return String((0..<length).map{ _ in letters.randomElement()! })
