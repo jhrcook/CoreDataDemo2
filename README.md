@@ -211,3 +211,4 @@ If `movingSeed` is `nil`, nothing will happen and the selected plant's view cont
 If `movingSeed` is not `nil`, then the seed is moved, the CoreData store is saved and reloaded, and the plant's view controller is pushed.
 
 <img src="assets/Apr-05-2020_11-02-16.gif" width=300/>
+

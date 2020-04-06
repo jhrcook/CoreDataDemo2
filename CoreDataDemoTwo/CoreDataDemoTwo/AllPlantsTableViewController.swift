@@ -42,6 +42,12 @@ class AllPlantsTableViewController: UITableViewController, NSFetchedResultsContr
     }
     
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let numObjects = fetchedResultsController.fetchedObjects?.count ?? 0
+        print("number of fetched objects: \(numObjects)")
+    }
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! AllPlantsTableViewCell
@@ -172,7 +178,7 @@ extension AllPlantsTableViewController {
             ["Thelocactus", "hexaedrophorus"],
             ["Neoporteria", "esmeraldana"]
         ]
-        
+
         for plantName in plantNames {
             let plant = Plant(context: container.viewContext)
             plant.uuid = UUID()
@@ -186,7 +192,9 @@ extension AllPlantsTableViewController {
     }
 
     func randomString(length: Int) -> String {
-      let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+      let letters = "abcdefghijklmnopqrstuvwxyz"
       return String((0..<length).map{ _ in letters.randomElement()! })
     }
+    
+    
 }
